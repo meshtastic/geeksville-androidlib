@@ -1,31 +1,22 @@
 package com.geeksville.analytics
 
-/* changed to the new firebase analytics
 import android.content.Context
+import android.os.Bundle
 import com.geeksville.android.AppPrefs
 import com.geeksville.android.Logging
-import com.google.android.gms.analytics.HitBuilders
 
 /**
- * Created by kevinh on 12/24/14.
+ * Implement our analytics API using firebase analtics
  */
+class GoogleAnalytics(context: Context): AnalyticsProvider, Logging {
 
-/**
- * Implement our analytics API using google analtics
- */
-class GoogleAnalytics(context: Context, googleAnalyticsRes: Int): AnalyticsProvider, Logging {
-
-    val analytics = com.google.android.gms.analytics.GoogleAnalytics.getInstance(context)
-    val t = analytics.newTracker(googleAnalyticsRes);
+    val t = com.google.firebase.analytics.FirebaseAnalytics.getInstance(context)
 
     init {
-        t.enableAdvertisingIdCollection(true)
-        t.enableExceptionReporting(true)
-        //t.enableAutoActivityTracking(true)
 
         // Assign a unique ID
-        val pref = AppPrefs(context)
-        t.set("&uid", pref.getInstallId())
+        // val pref = AppPrefs(context)
+        //t.set("&uid", pref.getInstallId())
     }
 
     override fun endSession() {
@@ -38,11 +29,13 @@ class GoogleAnalytics(context: Context, googleAnalyticsRes: Int): AnalyticsProvi
     }
 
     override fun track(event: String, vararg properties: DataPair) {
-        val category = "default"
+        /*
+        val bundle = Bundle()
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id)
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name)
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image")
+        t.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
 
-        val n = HitBuilders.EventBuilder()
-                .setCategory(category)
-                .setAction(event)
 
         // We only support one property
         val prop = properties.firstOrNull()
@@ -51,15 +44,14 @@ class GoogleAnalytics(context: Context, googleAnalyticsRes: Int): AnalyticsProvi
             n.setLabel(prop.value.toString())
         }
 
+         */
+
         debug("Analytics: track $event")
-        t.send(n.build());
     }
 
     override fun startSession() {
         debug("Analytics: start session")
-        t.send(HitBuilders.ScreenViewBuilder()
-                .setNewSession()
-                .build())
+        // automatic with firebase
     }
 
     override fun setUserInfo(vararg p: DataPair) {
@@ -76,14 +68,10 @@ class GoogleAnalytics(context: Context, googleAnalyticsRes: Int): AnalyticsProvi
      */
     override fun sendScreenView(name: String) {
         debug("Analytics: start screen $name")
-        t.setScreenName(name)
-        t.send(HitBuilders.ScreenViewBuilder().build());
+        // automatic with firebase
     }
 
     override fun endScreenView() {
         debug("Analytics: end screen")
-        t.setScreenName(null)
     }
 }
-*
- */

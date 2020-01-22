@@ -1,18 +1,16 @@
 package com.geeksville.android
 
 import android.app.Application
-import com.google.android.gms.analytics.Tracker
 import kotlin.properties.Delegates
 import android.content.Context
 import android.net.ConnectivityManager
 import com.geeksville.analytics.*
-import com.google.android.gms.analytics.HitBuilders
 
 /**
  * Created by kevinh on 1/4/15.
  */
 
-open public class GeeksvilleApplication(val googleAnalyticsRes: Int, val splunkKey: String?, val mixpanelKey: String?, val pushKey: String?): Application(), Logging {
+open public class GeeksvilleApplication(val splunkKey: String?, val mixpanelKey: String?, val pushKey: String? = null): Application(), Logging {
 
     var analytics: AnalyticsProvider? = null
     var splunk: AnalyticsProvider? = null
@@ -26,7 +24,7 @@ open public class GeeksvilleApplication(val googleAnalyticsRes: Int, val splunkK
             splunk = SplunkAnalytics(this, splunkKey) // Only used for crash reports
         */
 
-        val googleAnalytics = GoogleAnalytics(this, googleAnalyticsRes)
+        val googleAnalytics = com.geeksville.analytics.GoogleAnalytics(this)
         if(mixpanelKey != null) {
             val mix = com.geeksville.analytics.MixpanelAnalytics(this, mixpanelKey, pushKey)
             mixAnalytics = mix

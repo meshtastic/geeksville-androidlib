@@ -8,7 +8,7 @@ import org.json.JSONObject
 import com.geeksville.android.Logging
 
 
-class MixpanelAnalytics(context: Context, apiToken: String, pushToken: String?) : AnalyticsProvider, Logging {
+class MixpanelAnalytics(context: Context, apiToken: String, pushToken: String? = null) : AnalyticsProvider, Logging {
     // Initialize the library with your
     // Mixpanel project token, MIXPANEL_TOKEN, and a reference
     // to your application context.
@@ -17,7 +17,7 @@ class MixpanelAnalytics(context: Context, apiToken: String, pushToken: String?) 
     val people = mixpanel.getPeople()!!
 
     init {
-        fixupMixpanel()
+        // fixupMixpanel()
 
         // Assign a unique ID
         val pref = AppPrefs(context)
@@ -30,7 +30,7 @@ class MixpanelAnalytics(context: Context, apiToken: String, pushToken: String?) 
     }
 
     /**
-     * Work around for mixpanel bug
+     * Work around for mixpanel bug - no longer needed
      * https://github.com/mixpanel/mixpanel-android/issues/253
      */
     private fun fixupMixpanel() {
@@ -83,7 +83,7 @@ class MixpanelAnalytics(context: Context, apiToken: String, pushToken: String?) 
 
     override fun sendScreenView(name: String) {
         // too verbose for mixpanel
-        // track(name)
+        track(name)
     }
 
     override fun endScreenView() {}
