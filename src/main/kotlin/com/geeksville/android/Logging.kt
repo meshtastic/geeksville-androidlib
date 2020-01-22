@@ -25,4 +25,11 @@ interface Logging {
     }
     fun warn(msg: String) = Log.w(tag(), msg)
     fun error(msg: String) = Log.e(tag(), msg)
+
+    /// Kotlin assertions are disabled on android, so instead we use this gassert helper
+    fun logAssert(f: Boolean) {
+        if(!f) {
+            throw AssertionError("Assertion failed")
+        }
+    }
 }

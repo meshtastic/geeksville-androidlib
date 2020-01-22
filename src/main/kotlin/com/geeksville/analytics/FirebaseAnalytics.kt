@@ -14,9 +14,8 @@ class GoogleAnalytics(context: Context): AnalyticsProvider, Logging {
 
     init {
 
-        // Assign a unique ID
-        // val pref = AppPrefs(context)
-        //t.set("&uid", pref.getInstallId())
+        val pref = AppPrefs(context)
+        t.setUserId(pref.getInstallId())
     }
 
     override fun endSession() {
