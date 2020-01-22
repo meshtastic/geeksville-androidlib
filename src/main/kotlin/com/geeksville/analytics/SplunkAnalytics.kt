@@ -2,13 +2,16 @@ package com.geeksville.analytics
 
 import android.content.Context
 import com.geeksville.android.Logging
-import com.splunk.mint.Mint
+
 
 /**
  * Created by kevinh on 12/24/14.
  */
 
 // Mint.initAndStartSession(MyActivity.this, "01a9c628");
+
+/* disable for now because something in gradle doesn't like their lib repo
+import com.splunk.mint.Mint
 
 class SplunkAnalytics(val context: Context, apiToken: String) : AnalyticsProvider, Logging {
 
@@ -61,3 +64,5 @@ class SplunkAnalytics(val context: Context, apiToken: String) : AnalyticsProvide
     override fun endScreenView() {
     }
 }
+
+ */

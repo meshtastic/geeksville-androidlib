@@ -21,8 +21,10 @@ open public class GeeksvilleApplication(val googleAnalyticsRes: Int, val splunkK
     override fun onCreate() {
         super<Application>.onCreate()
 
+        /*
         if(splunkKey != null)
             splunk = SplunkAnalytics(this, splunkKey) // Only used for crash reports
+        */
 
         val googleAnalytics = GoogleAnalytics(this, googleAnalyticsRes)
         if(mixpanelKey != null) {
