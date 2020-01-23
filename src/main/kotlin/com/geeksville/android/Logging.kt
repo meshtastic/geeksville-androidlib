@@ -3,6 +3,7 @@ package com.geeksville.android
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.os.Build
+import android.os.Debug
 import android.util.Log
 import com.geeksville.andlib.BuildConfig
 
@@ -29,7 +30,10 @@ interface Logging {
     /// Kotlin assertions are disabled on android, so instead we use this gassert helper
     fun logAssert(f: Boolean) {
         if(!f) {
-            throw AssertionError("Assertion failed")
+            val ex = AssertionError("Assertion failed")
+
+            // if(!Debug.isDebuggerConnected())
+            throw ex
         }
     }
 }
