@@ -20,6 +20,6 @@ fun exceptionsToStrings(inner: () -> Unit): String? = try {
     inner()
     null
 } catch (ex: Throwable) {
-    Log.e("exceptionReporter", "Uncaught exception", ex)
+    Log.e("exceptionsToStrings", "Uncaught exception", ex)
     ex.message
 }
