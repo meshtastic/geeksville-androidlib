@@ -37,12 +37,3 @@ fun initExceptionReporter() {
 }
 
 
-/**
- * This wraps (and discards) exceptions, but first it reports them to our bug tracking system and prints
- * a message to the log.
- */
-fun exceptionReporter(inner: () -> Unit) = try {
-    inner()
-} catch (ex: Throwable) {
-    reportException(ex)
-}
