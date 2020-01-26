@@ -26,10 +26,14 @@ class SyncContinuation<T> {
     }
 
     // Wait for the result (or throw an exception)
-    fun await(): T {  // FIXME, support timeouts
+    fun await(timeoutMsecs: Long = -1): T {  // FIXME, support timeouts
         synchronized(mbox) {
-            while(result == null) {
-                mbox.wait()
+            val startT = System.currentTimeMillis()
+            while (result == null) {
+                mbox.wait(timeoutMsecs)
+
+                if (timeoutMsecs > 0 && ((System.currentTimeMillis() - startT) >= timeoutMsecs))
+                    throw Exception("SyncContinuation timeout")
             }
 
             val r = result
@@ -47,12 +51,12 @@ class SyncContinuation<T> {
  *
  * Essentially this is a blocking version of the (buggy) coroutine suspendCoroutine
  */
-fun <T> suspend(initfn: (SyncContinuation<T>) -> Unit): T {
+fun <T> suspend(timeoutMsecs: Long = -1, initfn: (SyncContinuation<T>) -> Unit): T {
     val cont = SyncContinuation<T>()
 
     // First call the init funct
     initfn(cont)
 
     // Now wait for the continuation to finish
-    return cont.await()
+    return cont.await(timeoutMsecs)
 }
