@@ -1,5 +1,6 @@
 package com.geeksville.util
 
+import android.os.RemoteException
 import android.util.Log
 
 /**
@@ -13,13 +14,11 @@ fun <T> exceptionReporter(inner: () -> T): T = try {
     throw ex
 }
 
-/// When passing exceptions out into frameworks (AIDL) that don't understand such things, it is
-/// sometimes useful to return exceptions as Strings or null for no failure
-
-fun exceptionsToStrings(inner: () -> Unit): String? = try {
+/// Convert any exceptions in this service call into a RemoteException that the client can
+/// then handle
+fun <T> toRemoteExceptions(inner: () -> T): T = try {
     inner()
-    null
 } catch (ex: Throwable) {
-    Log.e("exceptionsToStrings", "Uncaught exception", ex)
-    ex.message
+    Log.e("toRemoteExceptions", "Uncaught exception, returning to remote client", ex)
+    throw RemoteException(ex.message)
 }
