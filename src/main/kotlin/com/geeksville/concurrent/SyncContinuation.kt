@@ -1,26 +1,39 @@
 package com.geeksville.concurrent
 
+
+/**
+ * A deferred execution object (with various possible implementations)
+ */
+interface Continuation<in T> {
+    abstract fun resume(res: Result<T>)
+
+    // syntactic sugar
+
+    fun resumeSuccess(res: T) = resume(Result.success(res))
+    fun resumeWithException(ex: Throwable) = resume(Result.failure(ex))
+}
+
+/**
+ * An async continuation that just calls a callback when the result is available
+ */
+class CallbackContinuation<in T>(private val cb: (Result<T>) -> Unit) : Continuation<T> {
+    override fun resume(res: Result<T>) = cb(res)
+}
+
 /**
  * This is a blocking/threaded version of coroutine Continuation
  *
  * A little bit ugly, but the coroutine version has a nasty internal bug that showed up
  * in my SyncBluetoothDevice so I needed a quick workaround.
  */
-class SyncContinuation<T> {
+class SyncContinuation<T> : Continuation<T> {
 
     private val mbox = java.lang.Object()
     private var result: Result<T>? = null
 
-    fun resume(res: T) {
+    override fun resume(res: Result<T>) {
         synchronized(mbox) {
-            result = Result.success(res)
-            mbox.notify()
-        }
-    }
-
-    fun resumeWithException(ex: Throwable) {
-        synchronized(mbox) {
-            result = Result.failure(ex)
+            result = res
             mbox.notify()
         }
     }
