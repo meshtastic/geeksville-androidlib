@@ -24,7 +24,7 @@ interface Logging {
     fun warn(msg: String) = Log.w(tag(), msg)
     fun error(msg: String, ex: Throwable? = null) = Log.e(tag(), msg, ex)
 
-    /// Kotlin assertions are disabled on android, so instead we use this gassert helper
+    /// Kotlin assertions are disabled on android, so instead we use this assert helper
     fun logAssert(f: Boolean) {
         if (!f) {
             val ex = AssertionError("Assertion failed")
@@ -32,5 +32,10 @@ interface Logging {
             // if(!Debug.isDebuggerConnected())
             throw ex
         }
+    }
+
+    /// Report an error (including messaging our crash reporter service if allowed
+    fun reportError(s: String) {
+        error(s) // FIXME also report
     }
 }
