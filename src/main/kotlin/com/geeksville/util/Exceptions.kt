@@ -26,3 +26,9 @@ fun <T> toRemoteExceptions(inner: () -> T): T = try {
     Log.e("toRemoteExceptions", "Uncaught exception, returning to remote client", ex)
     throw RemoteException(ex.message)
 }
+
+// Report our exception to our analytics service and return
+fun reportException(ex: Throwable) {
+    // FIXME
+    throw ex // remove this throw
+}

@@ -9,15 +9,27 @@ import android.util.Log
 interface Logging {
 
     companion object {
+        /// if false NO logs will be shown, set this in the application based on BuildConfig.DEBUG
+        var showLogs = true
+
+        /// If false debug logs will not be shown (but others might)
         var showDebug = true
     }
 
     private fun tag(): String = this.javaClass.getName()
 
-    fun info(msg: String) = Log.i(tag(), msg)
-    fun verbose(msg: String) = Log.v(tag(), msg)
+    fun info(msg: String) {
+        if (showLogs)
+            Log.i(tag(), msg)
+    }
+
+    fun verbose(msg: String) {
+        if (showDebug && showLogs)
+            Log.v(tag(), msg)
+    }
+
     fun debug(msg: String) {
-        if (showDebug)
+        if (showDebug && showLogs)
             Log.d(tag(), msg)
     }
 
