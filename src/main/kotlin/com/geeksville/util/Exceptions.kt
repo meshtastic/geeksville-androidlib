@@ -2,6 +2,25 @@ package com.geeksville.util
 
 import android.os.RemoteException
 import android.util.Log
+import com.geeksville.android.Logging
+
+
+object Exceptions : Logging {
+    /// Set in Application.onCreate
+    var reporter: ((Throwable, String?, String?) -> Unit)? = null
+
+    /**
+     * Report an exception to our analytics provider (if installed - otherwise just log)
+     *
+     * After reporting return
+     */
+    fun report(exception: Throwable, tag: String? = null, message: String? = null) {
+        reporter?.let { r ->
+            r(exception, tag, message)
+        }
+        error("$tag $message", exception)
+    }
+}
 
 /**
  * This wraps (and discards) exceptions, but first it reports them to our bug tracking system and prints
@@ -11,10 +30,8 @@ fun exceptionReporter(inner: () -> Unit) {
     try {
         inner()
     } catch (ex: Throwable) {
-        Log.e("exceptionReporter", "Uncaught exception", ex)
-        // FIXME - log with analyics
         // DO NOT THROW users expect we have fully handled/discarded the exception
-        // throw ex
+        Exceptions.report(ex, "exceptionReporter", "Uncaught Exception")
     }
 }
 
@@ -27,8 +44,3 @@ fun <T> toRemoteExceptions(inner: () -> T): T = try {
     throw RemoteException(ex.message)
 }
 
-// Report our exception to our analytics service and return
-fun reportException(ex: Throwable) {
-    // FIXME
-    throw ex // remove this throw
-}
