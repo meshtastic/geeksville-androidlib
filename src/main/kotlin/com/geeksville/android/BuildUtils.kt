@@ -18,4 +18,7 @@ object BuildUtils : Logging {
         debug("Device type is: ${Build.DEVICE}")
         return Build.DEVICE == "osprey_u2" // Moto G
     }
+
+    /// Are we running on the emulator?
+    val isEmulator get() = Build.MODEL == "Android SDK built for x86"
 }
