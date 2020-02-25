@@ -1,18 +1,26 @@
 package com.geeksville.android
 
 import android.app.Application
-import kotlin.properties.Delegates
 import android.content.Context
 import android.net.ConnectivityManager
-import com.geeksville.analytics.*
+import com.geeksville.analytics.AnalyticsProvider
+import com.geeksville.analytics.MixpanelAnalytics
+import com.geeksville.analytics.TeeAnalytics
 
 /**
  * Created by kevinh on 1/4/15.
  */
 
-open public class GeeksvilleApplication(val splunkKey: String?, val mixpanelKey: String?, val pushKey: String? = null): Application(), Logging {
+open class GeeksvilleApplication(
+    val splunkKey: String?,
+    val mixpanelKey: String?,
+    val pushKey: String? = null
+) : Application(), Logging {
 
-    var analytics: AnalyticsProvider? = null
+    companion object {
+        lateinit var analytics: AnalyticsProvider
+    }
+
     var splunk: AnalyticsProvider? = null
     var mixAnalytics: MixpanelAnalytics? = null
 
@@ -25,13 +33,12 @@ open public class GeeksvilleApplication(val splunkKey: String?, val mixpanelKey:
         */
 
         val googleAnalytics = com.geeksville.analytics.GoogleAnalytics(this)
-        if(mixpanelKey != null) {
+        if (mixpanelKey != null) {
             val mix = com.geeksville.analytics.MixpanelAnalytics(this, mixpanelKey, pushKey)
             mixAnalytics = mix
 
             analytics = TeeAnalytics(googleAnalytics, mix)
-        }
-        else
+        } else
             analytics = googleAnalytics
     }
 
@@ -52,6 +59,6 @@ interface GeeksvilleApplicationClient {
 
     fun geeksvilleApp() = getApplication() as GeeksvilleApplication
 
-    fun getAnalytics() = geeksvilleApp().analytics!!
+    fun getAnalytics() = GeeksvilleApplication.analytics
 
 }

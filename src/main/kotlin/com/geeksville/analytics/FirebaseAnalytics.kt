@@ -8,7 +8,7 @@ import com.geeksville.android.Logging
 /**
  * Implement our analytics API using firebase analtics
  */
-class GoogleAnalytics(context: Context): AnalyticsProvider, Logging {
+class GoogleAnalytics(context: Context) : AnalyticsProvider, Logging {
 
     val t = com.google.firebase.analytics.FirebaseAnalytics.getInstance(context)
 
@@ -28,24 +28,13 @@ class GoogleAnalytics(context: Context): AnalyticsProvider, Logging {
     }
 
     override fun track(event: String, vararg properties: DataPair) {
-        /*
-        val bundle = Bundle()
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id)
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name)
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image")
-        t.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
-
-
-        // We only support one property
-        val prop = properties.firstOrNull()
-        if(prop != null) {
-            // We just pass the value, throw away label
-            n.setLabel(prop.value.toString())
-        }
-
-         */
-
         debug("Analytics: track $event")
+
+        val bundle = Bundle()
+        properties.forEach {
+            bundle.putString(it.name, it.value.toString())
+        }
+        t.logEvent(event, bundle)
     }
 
     override fun startSession() {
@@ -54,8 +43,7 @@ class GoogleAnalytics(context: Context): AnalyticsProvider, Logging {
     }
 
     override fun setUserInfo(vararg p: DataPair) {
-        // FIXME
-        //p forEach { Mint.addExtraData(it.name, it.value.toString()) }
+        p.forEach { t.setUserProperty(it.name, it.value.toString()) }
     }
 
     override fun increment(name: String, amount: Double) {
