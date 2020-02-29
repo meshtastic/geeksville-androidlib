@@ -12,7 +12,6 @@ import com.google.android.gms.common.GooglePlayServicesUtil
 import android.content.IntentSender
 import android.content.Intent
 import android.util.Log
-import com.google.android.gms.common.api.Api.ApiOptions
 
 
 interface PlayClientCallbacks /* : Activity */ {
@@ -76,7 +75,7 @@ public class PlayClient(val context: Activity, val playCallbacks: PlayClientCall
                             } else if (i == ConnectionCallbacks.CAUSE_SERVICE_DISCONNECTED) {
                                 info("Connection lost.  Reason: Service Disconnected");
                             } else
-                                error("Unknown play kode $i")
+                                errormsg("Unknown play kode $i")
 
                             playCallbacks.onPlayConnectionSuspended()
                         }
@@ -97,7 +96,7 @@ public class PlayClient(val context: Activity, val playCallbacks: PlayClientCall
                                         result.startResolutionForResult(context,
                                                 PLAY_OAUTH_REQUEST_CODE);
                                     } catch (e: IntentSender.SendIntentException) {
-                                        error("Exception while starting resolution activity")
+                                        errormsg("Exception while starting resolution activity")
                                         playCallbacks.onPlayUnavailable()
                                     }
                                 }
@@ -162,7 +161,7 @@ public class PlayClient(val context: Activity, val playCallbacks: PlayClientCall
             }
             else {
                 // User opted to not install play
-                error("User declined play")
+                errormsg("User declined play")
                 context.finish()
             }
            true

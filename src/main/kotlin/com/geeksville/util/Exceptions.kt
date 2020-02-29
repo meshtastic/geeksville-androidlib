@@ -18,7 +18,7 @@ object Exceptions : Logging {
         reporter?.let { r ->
             r(exception, tag, message)
         }
-        error("$tag $message", exception)
+        errormsg("$tag $message", exception)
     }
 }
 

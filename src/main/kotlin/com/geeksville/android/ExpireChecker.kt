@@ -22,7 +22,7 @@ class ExpireChecker(val context: Activity) : Logging {
 
     private fun doExpire() {
         val packageName = context.packageName
-        error("$packageName is too old and must be updated at the Play store")
+        errormsg("$packageName is too old and must be updated at the Play store")
 
         Toast.makeText(
             context,

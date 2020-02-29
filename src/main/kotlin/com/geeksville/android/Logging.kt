@@ -34,7 +34,12 @@ interface Logging {
     }
 
     fun warn(msg: String) = Log.w(tag(), msg)
-    fun error(msg: String, ex: Throwable? = null) = Log.e(tag(), msg, ex)
+
+    /**
+     * Log an error message, note - we call this errormsg rather than error because error() is
+     * a stdlib function in kotlin in the global namespace and we don't want users to accidentally call that.
+     */
+    fun errormsg(msg: String, ex: Throwable? = null) = Log.e(tag(), msg, ex)
 
     /// Kotlin assertions are disabled on android, so instead we use this assert helper
     fun logAssert(f: Boolean) {
@@ -48,6 +53,6 @@ interface Logging {
 
     /// Report an error (including messaging our crash reporter service if allowed
     fun reportError(s: String) {
-        error(s) // FIXME also report
+        errormsg(s) // FIXME also report
     }
 }
