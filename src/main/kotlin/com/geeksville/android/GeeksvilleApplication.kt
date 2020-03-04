@@ -1,8 +1,10 @@
 package com.geeksville.android
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
+import android.os.Bundle
 import com.geeksville.analytics.AnalyticsProvider
 import com.geeksville.analytics.MixpanelAnalytics
 import com.geeksville.analytics.TeeAnalytics
@@ -19,10 +21,36 @@ open class GeeksvilleApplication(
 
     companion object {
         lateinit var analytics: AnalyticsProvider
+        var currentActivity: Activity? = null
     }
 
     var splunk: AnalyticsProvider? = null
     var mixAnalytics: MixpanelAnalytics? = null
+
+    private val lifecycleCallbacks = object : ActivityLifecycleCallbacks {
+        override fun onActivityPaused(activity: Activity) {
+        }
+
+        override fun onActivityStarted(activity: Activity) {
+        }
+
+        override fun onActivityDestroyed(activity: Activity) {
+            currentActivity = null
+        }
+
+        override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
+        }
+
+        override fun onActivityStopped(activity: Activity) {
+        }
+
+        override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+            currentActivity = activity
+        }
+
+        override fun onActivityResumed(activity: Activity) {
+        }
+    }
 
     override fun onCreate() {
         super<Application>.onCreate()
@@ -40,6 +68,8 @@ open class GeeksvilleApplication(
             analytics = TeeAnalytics(googleAnalytics, mix)
         } else
             analytics = googleAnalytics
+
+        registerActivityLifecycleCallbacks(lifecycleCallbacks)
     }
 
     fun isInternetConnected(): Boolean {
@@ -54,10 +84,11 @@ open class GeeksvilleApplication(
 
 }
 
-interface GeeksvilleApplicationClient {
-    fun getApplication(): Application
 
-    fun geeksvilleApp() = getApplication() as GeeksvilleApplication
+fun geeksvilleApp(context: Context) = context.applicationContext as GeeksvilleApplication
+
+
+interface GeeksvilleApplicationClient {
 
     fun getAnalytics() = GeeksvilleApplication.analytics
 

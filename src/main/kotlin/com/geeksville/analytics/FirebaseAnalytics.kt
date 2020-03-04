@@ -3,6 +3,7 @@ package com.geeksville.analytics
 import android.content.Context
 import android.os.Bundle
 import com.geeksville.android.AppPrefs
+import com.geeksville.android.GeeksvilleApplication
 import com.geeksville.android.Logging
 
 /**
@@ -55,7 +56,11 @@ class GoogleAnalytics(context: Context) : AnalyticsProvider, Logging {
      */
     override fun sendScreenView(name: String) {
         debug("Analytics: start screen $name")
-        // automatic with firebase
+        GeeksvilleApplication.currentActivity?.let {
+            t.setCurrentScreen(
+                it, name, null
+            )
+        }
     }
 
     override fun endScreenView() {
