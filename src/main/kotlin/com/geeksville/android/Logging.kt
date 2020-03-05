@@ -1,6 +1,7 @@
 package com.geeksville.android
 
 import android.util.Log
+import com.geeksville.util.Exceptions
 
 /**
  * Created by kevinh on 12/24/14.
@@ -53,6 +54,6 @@ interface Logging {
 
     /// Report an error (including messaging our crash reporter service if allowed
     fun reportError(s: String) {
-        errormsg(s) // FIXME also report
+        Exceptions.report(Exception("logging reportError"), s)
     }
 }
