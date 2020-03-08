@@ -22,12 +22,16 @@ open class ServiceClient<T : IInterface>(private val stubFactory: (IBinder) -> T
 
     private var context: Context? = null
 
+    private var isClosed = true
+
     fun connect(c: Context, intent: Intent, flags: Int) {
         context = c
+        isClosed = false
         logAssert(c.bindService(intent, connection, flags))
     }
 
     override fun close() {
+        isClosed = true
         context?.unbindService(connection)
         serviceP = null
         context = null
@@ -43,9 +47,15 @@ open class ServiceClient<T : IInterface>(private val stubFactory: (IBinder) -> T
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, binder: IBinder) = exceptionReporter {
-            val s = stubFactory(binder)
-            serviceP = s
-            onConnected(s)
+            if (!isClosed) {
+                val s = stubFactory(binder)
+                serviceP = s
+                onConnected(s)
+            } else {
+                // If we start to close a service, it seems that there is a possibility a onServiceConnected event is the queue
+                // for us.  Be careful not to process that stale event
+                warn("A service connected while we were closing it, ignoring")
+            }
         }
 
         override fun onServiceDisconnected(name: ComponentName?) = exceptionReporter {
