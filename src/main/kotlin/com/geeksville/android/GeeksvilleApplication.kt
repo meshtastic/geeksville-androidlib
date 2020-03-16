@@ -14,8 +14,8 @@ import com.geeksville.analytics.TeeAnalytics
  */
 
 open class GeeksvilleApplication(
-    val splunkKey: String?,
-    val mixpanelKey: String?,
+    val splunkKey: String? = null,
+    val mixpanelKey: String? = null,
     val pushKey: String? = null
 ) : Application(), Logging {
 
