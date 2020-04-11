@@ -34,7 +34,12 @@ class TeeAnalytics(vararg providersIn: AnalyticsProvider) : AnalyticsProvider {
     override fun sendScreenView(name: String) {
         providers.forEach { it.sendScreenView(name) }
     }
+
     override fun endScreenView() {
         providers.forEach { it.endScreenView() }
+    }
+
+    override fun setEnabled(on: Boolean) {
+        providers.forEach { it.setEnabled(on) }
     }
 }

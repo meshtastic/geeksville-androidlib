@@ -40,6 +40,10 @@ class MixpanelAnalytics(context: Context, apiToken: String, pushToken: String? =
     override fun trackLowValue(event: String, vararg properties: DataPair) {
     }
 
+    override fun setEnabled(on: Boolean) {
+        if (on) mixpanel.optInTracking() else mixpanel.optOutTracking()
+    }
+
     override fun track(event: String, vararg properties: DataPair) {
 
         debug("Tracking $event")

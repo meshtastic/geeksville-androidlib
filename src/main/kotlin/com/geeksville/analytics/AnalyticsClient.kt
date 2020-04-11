@@ -1,10 +1,5 @@
 package com.geeksville.analytics
 
-import android.content.Context
-import org.json.JSONObject
-import android.app.Application
-import com.geeksville.android.Logging
-
 /**
  * Created by kevinh on 12/24/14.
  */
@@ -12,6 +7,10 @@ import com.geeksville.android.Logging
 data class DataPair(val name: String, val value: Any)
 
 public interface AnalyticsProvider {
+
+    // Turn analytics logging on/off
+    fun setEnabled(on: Boolean)
+
     /**
      * Store an event
      */

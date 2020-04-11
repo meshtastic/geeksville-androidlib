@@ -14,9 +14,12 @@ class GoogleAnalytics(context: Context) : AnalyticsProvider, Logging {
     val t = com.google.firebase.analytics.FirebaseAnalytics.getInstance(context)
 
     init {
-
         val pref = AppPrefs(context)
         t.setUserId(pref.getInstallId())
+    }
+
+    override fun setEnabled(on: Boolean) {
+        t.setAnalyticsCollectionEnabled(on)
     }
 
     override fun endSession() {

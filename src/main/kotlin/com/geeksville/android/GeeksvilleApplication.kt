@@ -3,8 +3,11 @@ package com.geeksville.android
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.provider.Settings
+import androidx.core.content.edit
 import com.geeksville.analytics.AnalyticsProvider
 import com.geeksville.analytics.MixpanelAnalytics
 import com.geeksville.analytics.TeeAnalytics
@@ -52,6 +55,33 @@ open class GeeksvilleApplication(
         }
     }
 
+    /// Are we running inside the testlab?
+    val isInTestLab: Boolean
+        get() {
+            val testLabSetting =
+                Settings.System.getString(contentResolver, "firebase.test.lab") ?: "unset"
+            info("Testlab is $testLabSetting")
+            return "true" == testLabSetting
+        }
+
+    private val analyticsPrefs: SharedPreferences by lazy {
+        getSharedPreferences(
+            "analytics-prefs",
+            Context.MODE_PRIVATE
+        )
+    }
+
+    var isAnalyticsAllowed: Boolean
+        get() = analyticsPrefs.getBoolean("allowed", true)
+        set(value) {
+            analyticsPrefs.edit(commit = true) {
+                putBoolean("allowed", value)
+            }
+
+            // Change the flag with the providers
+            analytics.setEnabled(value && !isInTestLab) // Never do analytics in the test lab
+        }
+
     override fun onCreate() {
         super<Application>.onCreate()
 
@@ -68,6 +98,9 @@ open class GeeksvilleApplication(
             analytics = TeeAnalytics(googleAnalytics, mix)
         } else
             analytics = googleAnalytics
+
+        // Set analytics per prefs
+        isAnalyticsAllowed = isAnalyticsAllowed
 
         registerActivityLifecycleCallbacks(lifecycleCallbacks)
     }
