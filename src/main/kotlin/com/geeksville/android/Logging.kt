@@ -7,6 +7,8 @@ import com.geeksville.util.Exceptions
  * Created by kevinh on 12/24/14.
  */
 
+typealias LogPrinter = (Int, String, String) -> Unit
+
 interface Logging {
 
     companion object {
@@ -15,26 +17,26 @@ interface Logging {
 
         /// If false debug logs will not be shown (but others might)
         var showDebug = true
+
+        /**
+         * By default all logs are printed using the standard android Log class.  But clients
+         * can change printlog to a different implementation (for logging to files or via
+         * google crashlytics)
+         */
+        var printlog: LogPrinter = { level, tag, message ->
+            if (showLogs) {
+                if (showDebug || level > Log.DEBUG)
+                    Log.println(level, tag, message)
+            }
+        }
     }
 
     private fun tag(): String = this.javaClass.getName()
 
-    fun info(msg: String) {
-        if (showLogs)
-            Log.i(tag(), msg)
-    }
-
-    fun verbose(msg: String) {
-        if (showDebug && showLogs)
-            Log.v(tag(), msg)
-    }
-
-    fun debug(msg: String) {
-        if (showDebug && showLogs)
-            Log.d(tag(), msg)
-    }
-
-    fun warn(msg: String) = Log.w(tag(), msg)
+    fun info(msg: String) = printlog(Log.INFO, tag(), msg)
+    fun verbose(msg: String) = printlog(Log.VERBOSE, tag(), msg)
+    fun debug(msg: String) = printlog(Log.DEBUG, tag(), msg)
+    fun warn(msg: String) = printlog(Log.WARN, tag(), msg)
 
     /**
      * Log an error message, note - we call this errormsg rather than error because error() is
