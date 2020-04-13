@@ -15,10 +15,13 @@ object Exceptions : Logging {
      * After reporting return
      */
     fun report(exception: Throwable, tag: String? = null, message: String? = null) {
+        errormsg(
+            "$tag $message",
+            exception
+        ) // print the message to the log _before_ telling the crash reporter
         reporter?.let { r ->
             r(exception, tag, message)
         }
-        errormsg("$tag $message", exception)
     }
 }
 
