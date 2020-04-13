@@ -9,6 +9,8 @@ import android.os.IInterface
 import com.geeksville.util.exceptionReporter
 import java.io.Closeable
 
+class BindFailedException : Exception("bindService failed")
+
 /**
  * A wrapper that cleans up the service binding process
  */
@@ -26,8 +28,13 @@ open class ServiceClient<T : IInterface>(private val stubFactory: (IBinder) -> T
 
     fun connect(c: Context, intent: Intent, flags: Int) {
         context = c
-        isClosed = false
-        logAssert(c.bindService(intent, connection, flags))
+        if (isClosed) {
+            isClosed = false
+            if (!c.bindService(intent, connection, flags))
+                throw BindFailedException()
+        } else {
+            warn("Ignoring rebind attempt for service")
+        }
     }
 
     override fun close() {
