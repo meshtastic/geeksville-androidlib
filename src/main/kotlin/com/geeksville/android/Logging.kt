@@ -56,6 +56,6 @@ interface Logging {
 
     /// Report an error (including messaging our crash reporter service if allowed
     fun reportError(s: String) {
-        Exceptions.report(Exception("logging reportError"), s)
+        Exceptions.report(Exception("logging reportError: $s"), s)
     }
 }
