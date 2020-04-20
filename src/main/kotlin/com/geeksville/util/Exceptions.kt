@@ -38,6 +38,18 @@ fun exceptionReporter(inner: () -> Unit) {
     }
 }
 
+/**
+ * This wraps (and discards) exceptions, but it does output a log message
+ */
+fun ignoreException(inner: () -> Unit) {
+    try {
+        inner()
+    } catch (ex: Throwable) {
+        // DO NOT THROW users expect we have fully handled/discarded the exception
+        Exceptions.errormsg("ignoring exception", ex)
+    }
+}
+
 /// Convert any exceptions in this service call into a RemoteException that the client can
 /// then handle
 fun <T> toRemoteExceptions(inner: () -> T): T = try {
