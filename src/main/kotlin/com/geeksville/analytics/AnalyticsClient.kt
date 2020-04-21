@@ -1,10 +1,16 @@
 package com.geeksville.analytics
 
+import com.google.firebase.analytics.FirebaseAnalytics
+
 /**
  * Created by kevinh on 12/24/14.
  */
 
-data class DataPair(val name: String, val value: Any)
+data class DataPair(val name: String, val value: Any) {
+    /// An accumulating firebase event - only one allowed per event
+    constructor(d: Double) : this(FirebaseAnalytics.Param.VALUE, d)
+    constructor(d: Int) : this(FirebaseAnalytics.Param.VALUE, d)
+}
 
 public interface AnalyticsProvider {
 

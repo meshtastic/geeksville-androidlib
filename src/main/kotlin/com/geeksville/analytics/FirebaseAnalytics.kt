@@ -36,7 +36,13 @@ class GoogleAnalytics(context: Context) : AnalyticsProvider, Logging {
 
         val bundle = Bundle()
         properties.forEach {
-            bundle.putString(it.name, it.value.toString())
+            when (it.value) {
+                is Double -> bundle.putDouble(it.name, it.value)
+                is Int -> bundle.putLong(it.name, it.value.toLong())
+                is Long -> bundle.putLong(it.name, it.value)
+                is Float -> bundle.putDouble(it.name, it.value.toDouble())
+                else -> bundle.putString(it.name, it.value.toString())
+            }
         }
         t.logEvent(event, bundle)
     }
