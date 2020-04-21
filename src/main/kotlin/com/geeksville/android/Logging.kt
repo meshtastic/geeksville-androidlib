@@ -42,7 +42,8 @@ interface Logging {
      * Log an error message, note - we call this errormsg rather than error because error() is
      * a stdlib function in kotlin in the global namespace and we don't want users to accidentally call that.
      */
-    fun errormsg(msg: String, ex: Throwable? = null) = printlog(tag(), msg, ex)
+    fun errormsg(msg: String, ex: Throwable? = null) =
+        printlog(Log.ERROR, tag(), "$msg (exception ${ex?.message ?: "none"}")
 
     /// Kotlin assertions are disabled on android, so instead we use this assert helper
     fun logAssert(f: Boolean) {
