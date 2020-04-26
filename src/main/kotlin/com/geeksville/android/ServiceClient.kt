@@ -30,8 +30,16 @@ open class ServiceClient<T : IInterface>(private val stubFactory: (IBinder) -> T
         context = c
         if (isClosed) {
             isClosed = false
-            if (!c.bindService(intent, connection, flags))
-                throw BindFailedException()
+            if (!c.bindService(intent, connection, flags)) {
+
+                // Some phones seem to ahve a race where if you unbind and quickly rebind bindService returns false.  Try
+                // a short sleep to see if that helps
+                reportError("Needed to use the second bind attempt hack")
+                Thread.sleep(200)
+                if (!c.bindService(intent, connection, flags)) {
+                    throw BindFailedException()
+                }
+            }
         } else {
             warn("Ignoring rebind attempt for service")
         }
