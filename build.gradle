@@ -52,6 +52,10 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    
     // NOTE: 8.4 depends on targeting 23, so I'm staying on 8.3
     // See list here: https://developers.google.com/android/guides/setup
     implementation 'com.google.android.gms:play-services-base:17.2.1'
