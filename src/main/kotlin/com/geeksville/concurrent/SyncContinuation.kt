@@ -39,7 +39,7 @@ class SyncContinuation<T> : Continuation<T> {
     }
 
     // Wait for the result (or throw an exception)
-    fun await(timeoutMsecs: Long = -1): T {  // FIXME, support timeouts
+    fun await(timeoutMsecs: Long = -1): T {
         synchronized(mbox) {
             val startT = System.currentTimeMillis()
             while (result == null) {
