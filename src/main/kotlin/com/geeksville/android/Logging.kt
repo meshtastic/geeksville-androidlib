@@ -1,6 +1,5 @@
 package com.geeksville.android
 
-import android.os.Build
 import android.util.Log
 import com.geeksville.util.Exceptions
 
@@ -24,7 +23,7 @@ interface Logging {
         /** if true, all logs will be printed at error level.  Sometimes necessary for buggy ROMs
          * that filter logcat output below this level.
          */
-        var forceErrorLevel = badVendors.contains(Build.MANUFACTURER)
+        var forceErrorLevel = false // badVendors.contains(Build.MANUFACTURER)
 
         /// If false debug logs will not be shown (but others might)
         var showDebug = true
