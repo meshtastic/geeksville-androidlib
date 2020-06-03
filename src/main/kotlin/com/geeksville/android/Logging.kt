@@ -1,5 +1,6 @@
 package com.geeksville.android
 
+import android.os.Build
 import android.util.Log
 import com.geeksville.util.Exceptions
 
@@ -12,8 +13,18 @@ typealias LogPrinter = (Int, String, String) -> Unit
 interface Logging {
 
     companion object {
+        /**
+         * alps == Soyes
+         */
+        private val badVendors = setOf("alps")
+
         /// if false NO logs will be shown, set this in the application based on BuildConfig.DEBUG
         var showLogs = true
+
+        /** if true, all logs will be printed at error level.  Sometimes necessary for buggy ROMs
+         * that filter logcat output below this level.
+         */
+        var forceErrorLevel = badVendors.contains(Build.MANUFACTURER)
 
         /// If false debug logs will not be shown (but others might)
         var showDebug = true
@@ -25,8 +36,9 @@ interface Logging {
          */
         var printlog: LogPrinter = { level, tag, message ->
             if (showLogs) {
-                if (showDebug || level > Log.DEBUG)
-                    Log.println(level, tag, message)
+                if (showDebug || level > Log.DEBUG) {
+                    Log.println(if (forceErrorLevel) Log.ERROR else level, tag, message)
+                }
             }
         }
     }
