@@ -8,6 +8,8 @@ import android.os.IBinder
 import android.os.IInterface
 import com.geeksville.util.exceptionReporter
 import java.io.Closeable
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 class BindFailedException : Exception("bindService failed")
 
@@ -20,11 +22,30 @@ open class ServiceClient<T : IInterface>(private val stubFactory: (IBinder) -> T
     var serviceP: T? = null
 
     /// A getter that returns the bound service or throws if not bound
-    val service get() = serviceP ?: throw Exception("Service not bound")
+    val service: T
+        get() {
+            waitConnect() // Wait for at least the initial connection to happen
+            return serviceP ?: throw Exception("Service not bound")
+        }
 
     private var context: Context? = null
 
     private var isClosed = true
+
+    private val lock = ReentrantLock()
+    private val condition = lock.newCondition()
+
+    /** Call this if you want to stall until the connection is completed */
+    fun waitConnect() {
+        // Wait until this service is connected
+        lock.withLock {
+            if (context == null)
+                throw Exception("Haven't called connect")
+
+            if (serviceP == null)
+                condition.await()
+        }
+    }
 
     fun connect(c: Context, intent: Intent, flags: Int) {
         context = c
@@ -66,6 +87,11 @@ open class ServiceClient<T : IInterface>(private val stubFactory: (IBinder) -> T
                 val s = stubFactory(binder)
                 serviceP = s
                 onConnected(s)
+
+                // after calling our handler, tell anyone who was waiting for this connection to complete
+                lock.withLock {
+                    condition.signalAll()
+                }
             } else {
                 // If we start to close a service, it seems that there is a possibility a onServiceConnected event is the queue
                 // for us.  Be careful not to process that stale event
