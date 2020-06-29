@@ -1,16 +1,22 @@
 package com.geeksville.concurrent
 
+import com.geeksville.android.Logging
+
 
 /**
  * A deferred execution object (with various possible implementations)
  */
-interface Continuation<in T> {
+interface Continuation<in T> : Logging {
     abstract fun resume(res: Result<T>)
 
     // syntactic sugar
 
     fun resumeSuccess(res: T) = resume(Result.success(res))
-    fun resumeWithException(ex: Throwable) = resume(Result.failure(ex))
+    fun resumeWithException(ex: Throwable) = try {
+        resume(Result.failure(ex))
+    } catch (ex: Throwable) {
+        errormsg("Ignoring $ex while resuming, because we are the ones who threw it")
+    }
 }
 
 /**
