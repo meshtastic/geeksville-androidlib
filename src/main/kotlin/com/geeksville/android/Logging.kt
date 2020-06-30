@@ -1,5 +1,6 @@
 package com.geeksville.android
 
+import android.os.Build
 import android.util.Log
 import com.geeksville.util.Exceptions
 
@@ -15,7 +16,7 @@ interface Logging {
         /**
          * alps == Soyes
          */
-        private val badVendors = setOf("alps")
+        private val badVendors = setOf("OnePlus", "alps")
 
         /// if false NO logs will be shown, set this in the application based on BuildConfig.DEBUG
         var showLogs = true
@@ -23,7 +24,7 @@ interface Logging {
         /** if true, all logs will be printed at error level.  Sometimes necessary for buggy ROMs
          * that filter logcat output below this level.
          */
-        var forceErrorLevel = false // badVendors.contains(Build.MANUFACTURER)
+        var forceErrorLevel = badVendors.contains(Build.MANUFACTURER)
 
         /// If false debug logs will not be shown (but others might)
         var showDebug = true
