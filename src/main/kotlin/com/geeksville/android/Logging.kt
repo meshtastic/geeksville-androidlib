@@ -15,8 +15,9 @@ interface Logging {
     companion object {
         /**
          * alps == Soyes
+         * HMD Global == mfg of the Nokia 7.2
          */
-        private val badVendors = setOf("OnePlus", "alps")
+        private val badVendors = setOf("OnePlus", "alps", "HMD Global")
 
         /// if false NO logs will be shown, set this in the application based on BuildConfig.DEBUG
         var showLogs = true
