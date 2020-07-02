@@ -15,7 +15,8 @@ interface Continuation<in T> : Logging {
     fun resumeWithException(ex: Throwable) = try {
         resume(Result.failure(ex))
     } catch (ex: Throwable) {
-        errormsg("Ignoring $ex while resuming, because we are the ones who threw it")
+        // errormsg("Ignoring $ex while resuming, because we are the ones who threw it")
+        throw ex
     }
 }
 
