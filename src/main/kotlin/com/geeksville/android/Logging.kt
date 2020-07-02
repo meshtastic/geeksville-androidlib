@@ -13,11 +13,12 @@ typealias LogPrinter = (Int, String, String) -> Unit
 interface Logging {
 
     companion object {
-        /**
+        /** Some vendors strip log messages unless the severity is super high.
+         *
          * alps == Soyes
          * HMD Global == mfg of the Nokia 7.2
          */
-        private val badVendors = setOf("OnePlus", "alps", "HMD Global")
+        private val badVendors = setOf("OnePlus", "alps", "HMD Global", "Sony")
 
         /// if false NO logs will be shown, set this in the application based on BuildConfig.DEBUG
         var showLogs = true
