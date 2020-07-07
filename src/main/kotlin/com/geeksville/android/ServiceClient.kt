@@ -55,7 +55,7 @@ open class ServiceClient<T : IInterface>(private val stubFactory: (IBinder) -> T
 
                 // Some phones seem to ahve a race where if you unbind and quickly rebind bindService returns false.  Try
                 // a short sleep to see if that helps
-                reportError("Needed to use the second bind attempt hack")
+                errormsg("Needed to use the second bind attempt hack")
                 Thread.sleep(500) // was 200ms, but received an autobug from a Galaxy Note4, android 6.0.1
                 if (!c.bindService(intent, connection, flags)) {
                     throw BindFailedException()
