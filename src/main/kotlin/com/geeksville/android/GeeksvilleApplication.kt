@@ -11,6 +11,15 @@ import androidx.core.content.edit
 import com.geeksville.analytics.AnalyticsProvider
 import com.geeksville.analytics.MixpanelAnalytics
 import com.geeksville.analytics.TeeAnalytics
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
+
+
+fun isGooglePlayAvailable(context: Context): Boolean {
+    val a = GoogleApiAvailability.getInstance()
+    val r = a.isGooglePlayServicesAvailable(context)
+    return r != ConnectionResult.SERVICE_MISSING && r != ConnectionResult.SERVICE_INVALID
+}
 
 /**
  * Created by kevinh on 1/4/15.
