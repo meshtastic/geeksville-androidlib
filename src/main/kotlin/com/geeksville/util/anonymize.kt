@@ -8,4 +8,10 @@ package com.geeksville.util
  * but still let us see if values were zero, empty or different.
  */
 val Any?.anonymize: String
-    get() = if (this != null) ("..." + this.toString().takeLast(3)) else "null"
+    get() = this.anonymize()
+
+/**
+ * A version of anonymize that allows passing in a custom minimum length
+ */
+fun Any?.anonymize(maxLen: Int = 3) =
+    if (this != null) ("..." + this.toString().takeLast(maxLen)) else "null"
