@@ -56,6 +56,9 @@ fun <T> toRemoteExceptions(inner: () -> T): T = try {
     inner()
 } catch (ex: Throwable) {
     Log.e("toRemoteExceptions", "Uncaught exception, returning to remote client", ex)
-    throw RemoteException(ex.message)
+    when(ex) { // don't double wrap remote exceptions
+        is RemoteException -> throw ex
+        else -> throw RemoteException(ex.message)
+    }
 }
 
