@@ -20,5 +20,5 @@ object BuildUtils : Logging {
     }
 
     /// Are we running on the emulator?
-    val isEmulator get() = Build.MODEL == "Android SDK built for x86"
+    val isEmulator get() = Build.MODEL == "Android SDK built for x86" || Build.MODEL == "sdk_gphone_x86"
 }
