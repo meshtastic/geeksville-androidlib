@@ -2,7 +2,9 @@ package com.geeksville.util
 
 import android.os.RemoteException
 import android.util.Log
+import android.view.View
 import com.geeksville.android.Logging
+import com.google.android.material.snackbar.Snackbar
 
 
 object Exceptions : Logging {
@@ -37,6 +39,18 @@ fun exceptionReporter(inner: () -> Unit) {
         Exceptions.report(ex, "exceptionReporter", "Uncaught Exception")
     }
 }
+
+/**
+ * If an exception occurs, show the message in a snackbar and continue
+ */
+fun exceptionToSnackbar(view: View, inner: () -> Unit) {
+    try {
+        inner()
+    } catch (ex: Throwable) {
+        Snackbar.make(view, ex.message ?: "An exception occurred", Snackbar.LENGTH_LONG).show()
+    }
+}
+
 
 /**
  * This wraps (and discards) exceptions, but it does output a log message
