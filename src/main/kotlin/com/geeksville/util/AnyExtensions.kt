@@ -6,9 +6,13 @@ fun Any.toOneLineString() = this.toString().replace('\n', ' ')
 fun formatAgo(lastSeenUnix: Int): String {
     val currentTime = (System.currentTimeMillis() / 1000).toInt()
     val diffMin = (currentTime - lastSeenUnix) / 60;
+    if (diffMin < 1)
+        return "now";
     if (diffMin < 100)
         return diffMin.toString() + "m"
     if (diffMin < 6000)
         return (diffMin / 60).toString() + "h"
-    return (diffMin / (60 * 24)).toString() + "d";
+    if (diffMin < 144000)
+        return (diffMin / (60 * 24)).toString() + "d";
+    return "?";
 }
