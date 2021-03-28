@@ -18,7 +18,7 @@ object Exceptions : Logging {
      */
     fun report(exception: Throwable, tag: String? = null, message: String? = null) {
         errormsg(
-            "$tag $message",
+            "Exceptions.report: $tag $message",
             exception
         ) // print the message to the log _before_ telling the crash reporter
         reporter?.let { r ->
