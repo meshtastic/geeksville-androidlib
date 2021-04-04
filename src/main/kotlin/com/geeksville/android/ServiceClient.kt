@@ -8,6 +8,7 @@ import android.os.IBinder
 import android.os.IInterface
 import com.geeksville.util.exceptionReporter
 import java.io.Closeable
+import java.lang.IllegalArgumentException
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -68,7 +69,13 @@ open class ServiceClient<T : IInterface>(private val stubFactory: (IBinder) -> T
 
     override fun close() {
         isClosed = true
-        context?.unbindService(connection)
+        try {
+            context?.unbindService(connection)
+        }
+        catch(ex: IllegalArgumentException) {
+            // Autobugs show this can generate an illegal arg exception for "service not registered" during reinstall?
+            warn("Ignoring error in ServiceClient.close, probably harmless")
+        }
         serviceP = null
         context = null
     }
