@@ -62,7 +62,7 @@ dependencies {
     // NOTE: 8.4 depends on targeting 23, so I'm staying on 8.3
     // See list here: https://developers.google.com/android/guides/setup
     implementation 'com.google.android.gms:play-services-base:17.6.0'
-    implementation 'com.google.firebase:firebase-analytics:18.0.2'
+    implementation 'com.google.firebase:firebase-analytics:18.0.3'
 }
 
 buildscript {
