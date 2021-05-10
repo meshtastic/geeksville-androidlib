@@ -55,12 +55,13 @@ fun exceptionToSnackbar(view: View, inner: () -> Unit) {
 /**
  * This wraps (and discards) exceptions, but it does output a log message
  */
-fun ignoreException(inner: () -> Unit) {
+fun ignoreException(silent: Boolean = false, inner: () -> Unit) {
     try {
         inner()
     } catch (ex: Throwable) {
         // DO NOT THROW users expect we have fully handled/discarded the exception
-        Exceptions.errormsg("ignoring exception", ex)
+        if(!silent)
+            Exceptions.errormsg("ignoring exception", ex)
     }
 }
 
