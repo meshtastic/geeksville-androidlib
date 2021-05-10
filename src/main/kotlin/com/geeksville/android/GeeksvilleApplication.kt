@@ -68,8 +68,9 @@ open class GeeksvilleApplication(
     val isInTestLab: Boolean
         get() {
             val testLabSetting =
-                Settings.System.getString(contentResolver, "firebase.test.lab") ?: "unset"
-            info("Testlab is $testLabSetting")
+                Settings.System.getString(contentResolver, "firebase.test.lab") ?: null
+            if(testLabSetting != null)
+                info("Testlab is $testLabSetting")
             return "true" == testLabSetting
         }
 
