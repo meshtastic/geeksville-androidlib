@@ -1,7 +1,16 @@
 package com.geeksville.util
 
+import com.geeksville.andlib.BuildConfig
+
 /// A toString that makes sure all newlines are removed (for nice logging).
 fun Any.toOneLineString() = this.toString().replace('\n', ' ')
+
+/// Return a one line string version of an object (but if a release build, just say 'might be PII)
+fun Any.toPIIString() =
+    if (!BuildConfig.DEBUG)
+        "<PII?>"
+    else
+        this.toOneLineString()
 
 fun formatAgo(lastSeenUnix: Int): String {
     val currentTime = (System.currentTimeMillis() / 1000).toInt()
