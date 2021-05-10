@@ -73,6 +73,6 @@ class GoogleAnalytics(context: Context) : AnalyticsProvider, Logging {
     }
 
     override fun endScreenView() {
-        debug("Analytics: end screen")
+        // debug("Analytics: end screen")
     }
 }
