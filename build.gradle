@@ -2,12 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 buildscript {
-    ext.kotlin_version = '1.5.21'
+    ext.kotlin_version = '1.5.30'
     ext.coroutines_version = "1.5.1"
 
     repositories {
         google()
-        jcenter()
+        // jcenter()
         mavenCentral()
     }
     dependencies {
@@ -63,7 +63,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
     implementation 'com.google.android.material:material:1.4.0'
     compileOnly 'com.mixpanel.android:mixpanel-android:5.8.7'
     // implementation 'com.splunk:mint-android-sdk:5.2.5'
@@ -78,7 +78,7 @@ dependencies {
     // NOTE: 8.4 depends on targeting 23, so I'm staying on 8.3
     // See list here: https://developers.google.com/android/guides/setup
     compileOnly 'com.google.android.gms:play-services-base:17.6.0'
-    implementation 'com.google.firebase:firebase-analytics:19.0.0'
+    implementation 'com.google.firebase:firebase-analytics:19.0.1'
 }
 
 allprojects {
