@@ -27,6 +27,15 @@ android {
         versionCode 1
         versionName "0.1"
     }
+    flavorDimensions 'default'
+    productFlavors {
+	fdroid {
+	    dimension = 'default'
+	}
+	play {
+            dimension = 'default'
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -77,8 +86,8 @@ dependencies {
 
     // NOTE: 8.4 depends on targeting 23, so I'm staying on 8.3
     // See list here: https://developers.google.com/android/guides/setup
-    compileOnly 'com.google.android.gms:play-services-base:17.6.0'
-    implementation 'com.google.firebase:firebase-analytics:20.0.2'
+    playCompileOnly 'com.google.android.gms:play-services-base:17.6.0'
+    playImplementation 'com.google.firebase:firebase-analytics:20.0.2'
 }
 
 allprojects {
