@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 
 buildscript {
     ext.kotlin_version = '1.6.10'
-    ext.coroutines_version = "1.5.2"
+    ext.coroutines_version = '1.6.0'
 
     repositories {
         google()
@@ -78,7 +78,7 @@ dependencies {
     // NOTE: 8.4 depends on targeting 23, so I'm staying on 8.3
     // See list here: https://developers.google.com/android/guides/setup
     compileOnly 'com.google.android.gms:play-services-base:17.6.0'
-    implementation 'com.google.firebase:firebase-analytics:20.0.2'
+    implementation 'com.google.firebase:firebase-analytics:20.1.0'
 }
 
 allprojects {
